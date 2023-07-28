@@ -1,6 +1,7 @@
 project "GLFW"       -- GLFW 프로젝트
     kind "StaticLib" -- 정적라이브러리 lib
     language "C"
+    staticruntime "off"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -19,28 +20,36 @@ project "GLFW"       -- GLFW 프로젝트
     }
 
 	filter "system:windows"
-        buildoptions { "-std=c11", "-lgdi32" }
-        systemversion "latest"
-        staticruntime "On"
+		systemversion "latest"
 
-        files -- 윈도우 플랫폼 의존(종속) 파일들
-        {
-            "src/win32_init.c",
-            "src/win32_joystick.c",
-            "src/win32_monitor.c",
-            "src/win32_time.c",
-            "src/win32_thread.c",
-            "src/win32_window.c",
-            "src/wgl_context.c",
-            "src/egl_context.c",
-            "src/osmesa_context.c"
-        }
+        	files -- 윈도우 플랫폼 의존(종속) 파일들
+        	{
+            		"src/win32_init.c",
+            		"src/win32_joystick.c",
+            		"src/win32_monitor.c",
+            		"src/win32_time.c",
+            		"src/win32_thread.c",
+            		"src/win32_window.c",
+            		"src/wgl_context.c",
+            		"src/egl_context.c",
+            		"src/osmesa_context.c"
+        	}
 
 		defines -- 윈도우 플랫폼 의존(종속) 전처리기 정의
 		{ 
-            "_GLFW_WIN32",
-            "_CRT_SECURE_NO_WARNINGS"
+            		"_GLFW_WIN32",
+            		"_CRT_SECURE_NO_WARNINGS"
 		}
 
-    filter { "system:windows", "configurations:Release" }
-        buildoptions "/MT"
+	filter "configurations:Debug"
+		runtime "Debug"
+		symbols "on"
+
+	filter "configurations:Release"
+		runtime "Release"
+		optimize "speed"
+
+    	filter "configurations:Dist"
+		runtime "Release"
+		optimize "speed"
+        	symbols "off"
