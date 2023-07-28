@@ -20,7 +20,7 @@ project "GLFW"       -- GLFW 프로젝트
     }
 
 	filter "system:windows"
-		systemversion "latest"
+	systemversion "latest"
 
         	files -- 윈도우 플랫폼 의존(종속) 파일들
         	{
@@ -41,15 +41,5 @@ project "GLFW"       -- GLFW 프로젝트
             		"_CRT_SECURE_NO_WARNINGS"
 		}
 
-	filter "configurations:Debug"
-		runtime "Debug"
-		symbols "on"
-
-	filter "configurations:Release"
-		runtime "Release"
-		optimize "speed"
-
-    	filter "configurations:Dist"
-		runtime "Release"
-		optimize "speed"
-        	symbols "off"
+ filter { "system:windows", "configurations:Release" }
+        buildoptions "/MT"
